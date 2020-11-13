@@ -34,6 +34,7 @@ else {
     //Hide all layers to start working your way from top to bottom.
     hideAllLayers(allLayers);
 
+    //Create a nested loop to move every layer to the desired desition.
     allLayers[0].visible = true;
     allLayers[0].translate(initWidth, 0);
 }
