@@ -16,6 +16,9 @@ else {
     //get a reference to the current open document
     doc = app.activeDocument;
 
+    //catch if columns is 0, because we'll have to divide by it later
+    if (columns == 0) {columns = 1};
+
     //get the current height and width of the active document
     initHeight = doc.height;
     initWidth = doc.width;
@@ -35,8 +38,26 @@ else {
     hideAllLayers(allLayers);
 
     //Create a nested loop to move every layer to the desired desition.
-    allLayers[0].visible = true;
-    allLayers[0].translate(initWidth, 0);
+    for(a = 0; a < numberOfSprites; a++) {
+        //get the modulo and dividend in order to determine the offset to move every layers in place.
+            var vModulo, vDividend;
+
+            vModulo = a % columns;
+            vDividend = Math.floor(a / columns);
+        
+        //move every layer by turning the layers visible and then moving them based on it's offset.
+        if (allLayers[a].isBackgroundLayer == false) {
+            allLayers[a].visible = true;
+            allLayers[a].translate(initWidth * vModulo, initHeight * vDividend);
+            }
+        //make a distintion and exception for the background layer if there's one present.
+        else {
+            allLayers[a].isBackgroundLayer = false;
+            allLayers[a].visible = true;
+            allLayers[a].translate(initWidth * vModulo, initHeight * vDividend);
+            allLayers[a].isBackgroundLayer = true;
+            }
+        }
 }
 
 function collectAllLayers (doc, allLayers){
