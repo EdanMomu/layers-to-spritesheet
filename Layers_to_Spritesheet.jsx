@@ -5,6 +5,10 @@ var inputColumns = prompt("This value will be the maximum number of sprites what
                         ,"Sprites per row"
                         ,"Please input the number of sprites per row");
 
+var skip = prompt("This is how many background layers you have at the bottom of the picture, these won't be moved."
+                    , "Skip these many layers"
+                    , "Please indicate how many layers to skip.");
+
 //Take the input string and turn it into an integer.
 columns = Math.abs(parseInt(inputColumns));
 
@@ -16,8 +20,12 @@ else {
     //get a reference to the current open document
     doc = app.activeDocument;
 
-    //catch if columns is 0, because we'll use it as a divisor
-    if (columns == 0) {columns = 1};
+    //catch if columns is 0 or lower, because we'll use it as a divisor
+    if (columns < 0) {columns = 1};
+    if (isNaN(skip) || (skip < 0)) {
+        alert("Invalid number of skiped frames, won't skip any.")
+        skip = 0;
+        }
 
     //get the current height and width of the active document
     initHeight = doc.height;
@@ -52,6 +60,7 @@ else {
         //move every layer by turning the layers visible and then moving them based on it's offset.
         if (allLayers[a].isBackgroundLayer == false) {
             allLayers[a].visible = true;
+            //alert(allLayers[a]);
             allLayers[a].translate(initWidth * vModulo, initHeight * vQuotient);
             }
         //make a distintion and exception for the background layer if there's one present.
